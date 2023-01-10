@@ -1,0 +1,15 @@
+{
+  "name": "shimizubot",
+  "version": "1.0.0",
+  "description": "QOL Wynncraft Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Take",
+  "license": "ISC",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "discord.js": "^14.7.1"
+  }
+}
