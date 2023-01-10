@@ -19,9 +19,11 @@ const client = new Client({
 client.once("ready", () => {
   console.log("Shimizu is live.");
 
-  client.user.setPresence({
-    activities: [{ name: `doing ur mum`, type: ActivityType.Competing }],
-    status: "online",
+  client.user.setStatus("available");
+  client.user.setActivity(`sh!help - doing ur mom`, {
+    //msg shown
+    type: "COMPETING",
+    url: "", //optional
   });
 });
 
@@ -41,7 +43,7 @@ client.on("messageCreate", (message) => {
   //lists all bot commands
   if (command === "help") {
     message.channel.send(
-      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\nsh!memes - sends a random meme```"
+      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\nsh!memes - sends a random meme\nsh!quote - generates random anime quote```"
     );
   }
 
@@ -212,7 +214,7 @@ client.on("messageCreate", (message) => {
 
   //flips a coin
   if (command === "cf") {
-    var result = Math.random() * 2;
+    var result = Math.floor(Math.random() * 2);
 
     if (result == 0) {
       message.channel.send("Heads!");
@@ -224,6 +226,7 @@ client.on("messageCreate", (message) => {
   //grabs a random meme from meme subreddit api and sends it
   if (command === "memes") {
     let body = "";
+    const https = require("https");
 
     https.get(`https://meme-api.com/gimme`, (resp) => {
       resp.on("data", (chunk) => {
@@ -241,6 +244,7 @@ client.on("messageCreate", (message) => {
   //sends a random anime quote
   if (command === "quote") {
     let body = "";
+    const https = require("https");
 
     https.get("https://animechan.vercel.app/api/random", (resp) => {
       resp.on("data", (chunk) => {
