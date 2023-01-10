@@ -38,12 +38,14 @@ client.on("messageCreate", (message) => {
 
   //commands
 
+  //lists all bot commands
   if (command === "help") {
     message.channel.send(
       "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\nsh!memes - sends a random meme```"
     );
   }
 
+  //lists all potential lootrun snipers on a wynncraft world
   if (command === "snipers") {
     const https = require("https");
 
@@ -208,6 +210,7 @@ client.on("messageCreate", (message) => {
     );
   }
 
+  //flips a coin
   if (command === "cf") {
     var result = Math.random() * 2;
 
@@ -218,6 +221,7 @@ client.on("messageCreate", (message) => {
     }
   }
 
+  //grabs a random meme from meme subreddit api and sends it
   if (command === "memes") {
     let body = "";
 
