@@ -77,12 +77,7 @@ client.on("messageCreate", (message) => {
       for (let i = 0; i < objectClass.length; i++) {
         let stringType = String(objectClass[i].type);
         if (
-          (stringType == "MAGE" ||
-            stringType == "ARCHER" ||
-            stringType == "WARRIOR" ||
-            stringType == "DARKWIZARD" ||
-            stringType == "HUNTER" ||
-            stringType == "KNIGHT") &
+          (checkLRClass(stringType) == true) &
           (lrLevel(objectClass[i].skills) == true) &
           (parseInt(Object.values(objectClass[i].skills)[2]) >= 80)
         ) {
