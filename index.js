@@ -19,7 +19,10 @@ const client = new Client({
 client.once("ready", () => {
   console.log("Shimizu is live.");
 
-  client.user.setActivity("doing urmum", { type: "COMPETING" });
+  client.user.setPresence({
+    activities: [{ name: `doing ur mum`, type: ActivityType.Competing }],
+    status: "online",
+  });
 });
 
 client.on("messageCreate", (message) => {
@@ -37,7 +40,7 @@ client.on("messageCreate", (message) => {
 
   if (command === "help") {
     message.channel.send(
-      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world```"
+      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\n```"
     );
   }
 
@@ -203,6 +206,16 @@ client.on("messageCreate", (message) => {
         });
       }
     );
+  }
+
+  if (command === "cf") {
+    var result = Math.random() * 2;
+
+    if (result == 0) {
+      message.channel.send("Heads!");
+    } else {
+      message.channel.send("Tails!");
+    }
   }
 });
 
