@@ -237,6 +237,23 @@ client.on("messageCreate", (message) => {
       });
     });
   }
+
+  //sends a random anime quote
+  if (command === "quote") {
+    let body = "";
+
+    https.get("https://animechan.vercel.app/api/random", (resp) => {
+      resp.on("data", (chunk) => {
+        body += chunk;
+      });
+
+      resp.on("end", () => {
+        let data = JSON.parse(body);
+
+        message.channel.send("*" + data.quote + "*\n-" + data.character);
+      });
+    });
+  }
 });
 
 //keep as last line in file
