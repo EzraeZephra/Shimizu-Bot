@@ -40,7 +40,7 @@ client.on("messageCreate", (message) => {
 
   if (command === "help") {
     message.channel.send(
-      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\n```"
+      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\nsh!memes - sends a random meme```"
     );
   }
 
@@ -216,6 +216,22 @@ client.on("messageCreate", (message) => {
     } else {
       message.channel.send("Tails!");
     }
+  }
+
+  if (command === "memes") {
+    let body = "";
+
+    https.get(`https://meme-api.com/gimme`, (resp) => {
+      resp.on("data", (chunk) => {
+        body += chunk;
+      });
+
+      resp.on("end", () => {
+        let data = JSON.parse(body);
+
+        message.channel.send(data.preview[data.preview.length - 1]);
+      });
+    });
   }
 });
 
