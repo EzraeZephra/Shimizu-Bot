@@ -250,7 +250,9 @@ client.on("messageCreate", (message) => {
       resp.on("end", () => {
         let data = JSON.parse(body);
 
-        message.channel.send("*" + data.quote + "*\n-" + data.character);
+        message.channel.send(
+          data.quote + "\n*-" + data.character + ", " + data.anime + "*"
+        );
       });
     });
   }
