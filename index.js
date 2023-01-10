@@ -212,6 +212,4 @@ client.on("messageCreate", (message) => {
 });
 
 //keep as last line in file
-client.login(
-  "MTA2MTkyNTE2MDk2MzI5NzMwMQ.GKUWQn.hKt8f7fcDl7GJBCRBwyy5ZSMatge14hAPCPWrQ"
-);
+client.login("token");
