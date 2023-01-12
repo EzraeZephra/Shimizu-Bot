@@ -7,8 +7,6 @@ const {
   Permissions,
 } = require("discord.js");
 
-const prefix = "sh!";
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
