@@ -1,3 +1,7 @@
+import DiscordJS, { Intents } from "discord.js";
+import dotenv from "dotenv";
+dotenv.config();
+
 const {
   Client,
   GatewayIntentBits,
@@ -8,7 +12,7 @@ const {
 
 const prefix = "sh!";
 
-const client = new Client({
+const client = new DiscordJS.Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
@@ -16,15 +20,56 @@ const client = new Client({
   ],
 });
 
-client.once("ready", () => {
+client.on("ready", () => {
   console.log("Shimizu is live.");
 
-  client.user.setStatus("available");
-  client.user.setActivity(`sh!help - doing ur mom`, {
-    //msg shown
-    type: "COMPETING",
-    url: "", //optional
+  const guildId = "691518381446398012";
+  const guild = client.guilds.cache.get(guildId);
+  let commands;
+
+  if (guild) {
+    commands = guild.commands;
+  } else {
+    commands = client.application?.commands;
+  }
+
+  commands?.create({
+    name: "help",
+    description: "Replies with a list of all commands.",
   });
+
+  commands?.create({
+    name: "snipers",
+    description: "Checks for potential lootrun snipers on a Wynncraft world.",
+    options: [
+      {
+        name: "wc",
+        description: "Specified Wynncraft world.",
+        require: true,
+        type: Discord.js.Constants.ApplicationCommandOptionTypes.NUMBER,
+      },
+    ],
+  });
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) {
+    return;
+  }
+
+  const { commandName, options } = interaction;
+
+  if (commandName === "help") {
+    interaction.reply({
+      content:
+        "```Commands: \n/snipers # - checks for potential lootrun snipers on the specified world\n/cf - flip a coin\n/memes - sends a random meme\n/quote - generates random anime quote```",
+      ephemeral: true,
+    });
+  }
+
+  if (commandName === "snipers") {
+    interaction.reply({});
+  }
 });
 
 client.on("messageCreate", (message) => {
@@ -263,4 +308,6 @@ client.on("messageCreate", (message) => {
 });
 
 //keep as last line in file
-client.login("token");
+client.login(
+  "MTA2MTkyNTE2MDk2MzI5NzMwMQ.GTcfZ-.xQoxGDekfFm_xOTHERIdRQF0uaVr98yzuM74bU"
+);
