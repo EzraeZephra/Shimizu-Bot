@@ -1,7 +1,4 @@
-import DiscordJS, { Intents } from "discord.js";
-import dotenv from "dotenv";
-dotenv.config();
-
+const { constants } = require("buffer");
 const {
   Client,
   GatewayIntentBits,
@@ -12,7 +9,7 @@ const {
 
 const prefix = "sh!";
 
-const client = new DiscordJS.Client({
+const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
@@ -45,10 +42,25 @@ client.on("ready", () => {
       {
         name: "wc",
         description: "Specified Wynncraft world.",
-        require: true,
-        type: Discord.js.Constants.ApplicationCommandOptionTypes.NUMBER,
+        required: true,
+        type: 10,
       },
     ],
+  });
+
+  commands?.create({
+    name: "cf",
+    description: "Flip a coin!",
+  });
+
+  commands?.create({
+    name: "meme",
+    description: "Sends a random meme.",
+  });
+
+  commands?.create({
+    name: "animequote",
+    description: "Generates a random anime quote.",
   });
 });
 
@@ -62,42 +74,13 @@ client.on("interactionCreate", async (interaction) => {
   if (commandName === "help") {
     interaction.reply({
       content:
-        "```Commands: \n/snipers # - checks for potential lootrun snipers on the specified world\n/cf - flip a coin\n/memes - sends a random meme\n/quote - generates random anime quote```",
+        "```Commands: \n/snipers # - checks for potential lootrun snipers on the specified world\n/cf - flip a coin\n/memes - sends a random meme\n/animequote - generates random anime quote```",
       ephemeral: true,
     });
-  }
-
-  if (commandName === "snipers") {
-    interaction.reply({});
-  }
-});
-
-client.on("messageCreate", (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  //message array
-  const messageArray = message.content.split(" ");
-  const argument = messageArray.slice(3);
-  const cmd = messageArray[0];
-
-  //commands
-
-  //lists all bot commands
-  if (command === "help") {
-    message.channel.send(
-      "```Commands (sh!): \nsh!snipers # - checks for potential lootrun snipers on the specified world\nsh!cf - flip a coin\nsh!memes - sends a random meme\nsh!quote - generates random anime quote```"
-    );
-  }
-
-  //lists all potential lootrun snipers on a wynncraft world
-  if (command === "snipers") {
+  } else if (commandName === "snipers") {
     const https = require("https");
+    const wc = options.getNumber("wc");
 
-    //prompts for retrieval commands
-    var wc = args;
     var lrlist = [];
     var counter = 0;
     var numPlayers;
@@ -218,8 +201,10 @@ client.on("messageCreate", (message) => {
       }
 
       if (counter >= numPlayers) {
-        console.log(lrlist);
-        message.channel.send("```" + lrlist.toString() + "```");
+        interaction.reply({
+          content: "```" + lrlist.toString() + "```",
+          ephemeral: false,
+        });
       }
     }
 
@@ -248,28 +233,29 @@ client.on("messageCreate", (message) => {
               printLRSP(plist[i]);
             }
           } else {
-            message.channel.send(
-              "Invalid World - Please Double Check World Number."
-            );
+            interaction.reply({
+              content: "Invalid World - Please Double Check World Number.",
+              ephemeral: true,
+            });
           }
         });
       }
     );
-  }
-
-  //flips a coin
-  if (command === "cf") {
+  } else if (commandName === "cf") {
     var result = Math.floor(Math.random() * 2);
 
     if (result == 0) {
-      message.channel.send("Heads!");
+      interaction.reply({
+        content: "Heads!",
+        ephemeral: false,
+      });
     } else {
-      message.channel.send("Tails!");
+      interaction.reply({
+        content: "Tails!",
+        ephemeral: false,
+      });
     }
-  }
-
-  //grabs a random meme from meme subreddit api and sends it
-  if (command === "memes") {
+  } else if (commandName === "meme") {
     let body = "";
     const https = require("https");
 
@@ -281,13 +267,13 @@ client.on("messageCreate", (message) => {
       resp.on("end", () => {
         let data = JSON.parse(body);
 
-        message.channel.send(data.preview[data.preview.length - 1]);
+        interaction.reply({
+          content: data.preview[data.preview.length - 1],
+          ephemeral: false,
+        });
       });
     });
-  }
-
-  //sends a random anime quote
-  if (command === "quote") {
+  } else if (commandName === "animequote") {
     let body = "";
     const https = require("https");
 
@@ -299,15 +285,15 @@ client.on("messageCreate", (message) => {
       resp.on("end", () => {
         let data = JSON.parse(body);
 
-        message.channel.send(
-          data.quote + "\n*-" + data.character + ", " + data.anime + "*"
-        );
+        interaction.reply({
+          content:
+            data.quote + "\n*-" + data.character + ", " + data.anime + "*",
+          ephemeral: false,
+        });
       });
     });
   }
 });
 
 //keep as last line in file
-client.login(
-  "MTA2MTkyNTE2MDk2MzI5NzMwMQ.GTcfZ-.xQoxGDekfFm_xOTHERIdRQF0uaVr98yzuM74bU"
-);
+client.login("Token");
