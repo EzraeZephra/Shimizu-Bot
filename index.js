@@ -296,4 +296,4 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 //keep as last line in file
-client.login("Token");
+client.login("token");
